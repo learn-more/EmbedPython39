@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    This is a property sheet to be included in MSVC projects.
+    Use "View|Property Manager" and choose "Add Existing Property Sheet..." from the context menu
+    to add it from the IDE.
+  -->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="UserMacros">
+    <pythonDir>C:\Program Files\Python39</pythonDir>
+    <!-- Convert backslashes so we can use this as macro -->
+    <exampleDir>$(MSBuildThisFileDirectory.Replace('\','/'))</exampleDir>
+
+    <!-- Debug versions of python libraries have a '_d' suffix -->
+    <pyDebugSuffix Condition="'$(Configuration)'=='Debug'">_d</pyDebugSuffix>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(pythonDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>EXAMPLEDIR="$(exampleDir)";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(pythonDir)\libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      
+      <!-- Ask to delay-load this module, so we can update the path before python is loaded. -->
+      <DelayLoadDLLs>python39$(pyDebugSuffix).dll</DelayLoadDLLs>
+    </Link>
+  </ItemDefinitionGroup>
+</Project>
